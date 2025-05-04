@@ -1,0 +1,54 @@
+sources = $(wildcard src/*.cc)
+objects = $(subst src/,tmp/,$(patsubst %.cc,%.o,$(sources)))
+exec = $(subst src/,bin/,$(subst .cxx,,$(wildcard src/*.cxx)))
+
+CC = g++
+LOCAL_INC = -Iinclude/ 
+
+ROOTLIBS = ${VIPHOMEROOTLIBS}
+ROOTINCDIR = ${VIPHOMEROOTINCDIR}
+
+CFLAGS = $(LOCAL_INC) -I$(VIP_COMMON_LIB_DIR)/include/ -isystem$(ROOTINCDIR) -Wl,--no-as-needed
+VIPLIBS = -L$(VIP_COMMON_LIB_DIR)/lib/ -lVIPcommonlib
+
+all: $(objects) $(exec) $(outlib)
+	@echo all done!
+
+$(objects): tmp/%.o: src/%.cc  
+	@echo compiling $@
+	@$(CC) -c $(CFLAGS) $< -o $@
+
+$(exec): bin/% : src/%.cxx $(objects)
+	@echo compiling $@
+	@$(CC) $(CFLAGS) $< $(objects)  -o $@ $(ROOTLIBS) $(VIPLIBS) 
+	@echo $(@F) compiled.
+
+$(notdir $(exec)): % : bin/%
+
+$(notdir $(objects)):%:tmp/%
+
+tmp/cc_%.d: src/%.cc 
+	@$(CC) -MM $(CFLAGS) $< | sed 's:$*\.o[ \:]:tmp/& $@:g' >  $@
+
+tmp/cxx_%.d: src/%.cxx
+	@$(CC) -MM $(CFLAGS) $< | sed 's:\.o::g' | sed 's:$*[ \:]:bin/& $@:g'  > $@
+
+-include $(subst src/,tmp/cc_,$(patsubst %.cc,%.d,$(wildcard src/*.cc)))
+-include $(subst src/,tmp/cxx_,$(patsubst %.cxx,%.d,$(wildcard src/*.cxx)))
+
+.PHONY: nobin
+nobin: $(objects)
+
+.PHONY: bin
+bin: $(exec)
+
+.PHONY: cleanemacs
+cleanemacs:
+	@-rm *~ */*~ &> /dev/null
+
+.PHONY: clean
+clean:
+	@-rm tmp/*.o tmp/*.d bin/* &> /dev/null
+
+.PHONY: cleanall
+cleanall:clean cleanemacs
