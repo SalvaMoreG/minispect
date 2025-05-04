@@ -1,0 +1,8 @@
+
+trig_E          0.0 MeV
+meas_T      10000 ps
+dead_T       1000 ps
+
+volumes         CdTe_pixel
+
+
