@@ -1,0 +1,94 @@
+### VERBOSITY ###
+/run/verbose 0
+/control/verbose 0
+/tracking/verbose 0
+
+### OUTPUT FILES ###
+
+### GEOMETRY ###
+/gamos/setParam GmGeometryFromText:FileName ./miniSPECT_arrow.geom
+/gamos/geometry GmGeometryFromText
+
+### PHYSICS ###
+/gamos/physicsList GmEMPhysics
+/gamos/GmPhysics/addPhysics gamma-lowener
+/gamos/GmPhysics/addPhysics electron-lowener
+
+/gamos/generator GmGenerator
+ 
+/run/initialize
+
+######### SENSITIVE DETECTORS ############
+
+# GmDataTTree stuff:
+/gamos/filter DepositedSomeEnergy GmDepositedEnergyFilter 0.000000001 10.000
+
+# IMPORTANT TO HAVE SOURCE AND PASSIVE MATERIAL ALSO IN THE LOGICAL VOLUME FILTER FOR NEMA TESTS
+#	/gamos/filter InMaterial GmInLogicalVolumeFilter CdTe_pixel 
+/gamos/filter InMaterial GmInLogicalVolumeFilter CdTe_pixel source* 
+
+/gamos/filter ForImagingOnly GmANDFilter DepositedSomeEnergy InMaterial
+
+########USER ACTIONS###############
+# THIS IS FOR THE GmDataTTree output
+#
+/gamos/setParam GmDataTTreeUA_ForImagingOnly:EventDataList InitialTime \
+EventID InitialPosX InitialPosY InitialPosZ 
+
+/gamos/setParam GmDataTTreeUA_ForImagingOnly:StepDataList \
+EventID \ 
+InitialLocalPosX InitialLocalPosY InitialLocalPosZ \
+InitialLogicalVolume \
+InitialTouchablePosX InitialTouchablePosY InitialTouchablePosZ \
+FinalPosX FinalPosY FinalPosZ \
+InitialUnitID \
+InitialTotalEnergy FinalTotalEnergy \
+AccumulatedEnergyDeposited \
+InitialTime \
+InitialPosX InitialPosY InitialPosZ \
+InitialDirX InitialDirY InitialDirZ \
+FinalDirX FinalDirY FinalDirZ \
+ParentTrackID CreatorProcess \
+Particle TrackID \
+InitialProcess FinalProcess
+
+/gamos/userAction GmDataTTreeUA ForImagingOnly
+
+######## Aaaaaaaaaaand the counts ######
+/gamos/userAction GmCountTracksUA
+
+########  PARTICLE SOURCE  #############
+
+/gamos/setParam GmVGenerDistPositionVolumesAndSurfaces:OnlyVolume 1
+
+#	/gamos/generator/addIsotopeSource f18source F18 10E6*becquerel
+#	/gamos/generator/energyDist na22source GmGenerDistEnergyBetaDecay
+#	/gamos/generator/positionDist f18source GmGenerDistPositionInG4Volumes source_point_source
+
+#	/gamos/generator/addIsotopeSource tc99mSource Tc99m 10E6*becquerel
+#	/gamos/generator/energyDist tc99mSource GmGenerDistEnergyBetaDecay
+#	/gamos/generator/positionDist tc99mSource GmGenerDistPositionInG4Volumes source_point_source
+
+/gamos/generator/addSingleParticleSource gamma_source gamma 140*keV  	
+/gamos/generator/positionDist gamma_source GmGenerDistPositionInG4Volumes source_point_source*
+/gamos/generator/directionDist gamma_source GmGenerDistDirectionCone 0.0 0.0 1.0 49.0*deg
+/gamos/generator/timeDist gamma_source GmGenerDistTimeDecay 10E6*becquerel
+
+#########visualization############# 
+#	/vis/open VRML2FILE
+#	/vis/open HepRepFile
+
+#	/vis/drawVolume
+#	/vis/scene/add/trajectories
+#	/vis/scene/add/hits
+
+#	/vis/scene/endOfEventAction accumulate
+
+#########number of events########## 
+
+
+
+
+### random seeds
+/gamos/random/setSeeds 344348322 553654108
+/run/beamOn 50000000

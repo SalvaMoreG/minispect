@@ -1,0 +1,15 @@
+failed to get the current screen resources
+QXcbConnection: XCB error: 170 (Unknown), sequence: 170, resource id: 90, major code: 146 (Unknown), minor code: 20
+kdevplatform.serialization: "The data-repository at /home/smoreno/.cache/kdevduchain/kdevelop-{5361e149-c427-4816-aed6-c8b497f35ca9} has to be cleared."
+kdevplatform.shell: Could not load plugin "KDevCMakeManager" , it reported the error: "Unable to find a CMake executable. Is one installed on the system?" Disabling the plugin now.
+kdevelop.plugins.qthelp: qmake query returned error: ""
+qrc:///qml/area_code.qml:70:9: Type NewsFeed unavailable
+qrc:///qml/NewsFeed.qml:24:1: module "QtQuick.XmlListModel" is not installed
+kdevplatform.shell: Could not load plugin "KDevCMakeManager" , it reported the error: "Unable to find a CMake executable. Is one installed on the system?" Disabling the plugin now.
+kdevelop.languages.clang: Unhandled type: Complex _Complex __float128
+kf5.kio.core: KSambaShare: Could not find smb.conf!
+Couldn't start kuiserver from org.kde.kuiserver.service: QDBusError("org.freedesktop.DBus.Error.ServiceUnknown", "The name org.kde.kuiserver was not provided by any .service files")
+kdevplatform.shell: Could not load plugin "KDevCMakeManager" , it reported the error: "Unable to find a CMake executable. Is one installed on the system?" Disabling the plugin now.
+The X11 connection broke (error 1). Did the X11 server die?
+ProblemData::diagnostics There were items left on destruction: 535
+register count: 0, destroy count 0: 
